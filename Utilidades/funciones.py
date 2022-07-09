@@ -6,6 +6,8 @@ from dotenv import load_dotenv
 from discord.ext import commands
 import json
 
+
+
 # Riot API Key
 key = 'RGAPI-714088e7-590f-42cd-8a89-ab750a7c9b80'
 api_key = key
@@ -218,6 +220,46 @@ def what_is_my_team(my_region, summoner_name, match_num):
    
 
   return blue_team, red_team
+
+
+def gamemode(my_region, summoner_name, match_num):
+   # Obtengo el puuid del summoner para separarlo en una variable.
+  me = watcher.summoner.by_name(my_region, summoner_name)
+  puuid =  me['puuid']
+
+  # Otengo un Metadata con toda la informacion de la partida.
+  matches20 = watcher.match.matchlist_by_puuid(my_region, puuid)
+
+  # Desestructurando un Metadata de una partida.
+  match_selected = watcher.match.by_id(my_region, matches20[match_num]) # Obtengo el match con el ID mas reciente. (MODIFICANDO EL 0 ELIJO LA PROXIMA PARTIDA)
+
+
+  # Declarando participantes de la partida.
+  gamemode = match_selected["info"]["gameMode"]
+
+
+  return gamemode
+
+
+def gameDuration(my_region, summoner_name, match_num):
+   # Obtengo el puuid del summoner para separarlo en una variable.
+  me = watcher.summoner.by_name(my_region, summoner_name)
+  puuid =  me['puuid']
+
+  # Otengo un Metadata con toda la informacion de la partida.
+  matches20 = watcher.match.matchlist_by_puuid(my_region, puuid)
+
+  # Desestructurando un Metadata de una partida.
+  match_selected = watcher.match.by_id(my_region, matches20[match_num]) # Obtengo el match con el ID mas reciente. (MODIFICANDO EL 0 ELIJO LA PROXIMA PARTIDA)
+
+
+  # Declarando participantes de la partida.
+  gameDuration = match_selected["info"]["gameDuration"]
+
+
+  return gameDuration
+
+
 
 
 bot.run(TOKEN)
