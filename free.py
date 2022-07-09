@@ -38,7 +38,7 @@ def mayor_maestry(my_region,summoner_name):
 
   # Buscar en champions.json el id de los campeones y obtener el nombre del campeon en total_maestry
 
-  with open('champion.json','r', encoding='utf-8') as file:   
+  with open('D:\Python\League-of-LegendsBOT\Utilidades\__pycache__\champion.json','r', encoding='utf-8') as file:   
      data = json.load(file) 
      data_champs_all = data['data']
      for key in data_champs_all:
