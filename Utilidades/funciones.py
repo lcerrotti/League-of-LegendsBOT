@@ -4,10 +4,10 @@ import os
 from urllib import response
 from dotenv import load_dotenv
 from discord.ext import commands
-
+import json
 
 # Riot API Key
-key = 'RGAPI-44e1e2a7-d60a-4d9a-88eb-b81a2da646b4'
+key = 'RGAPI-714088e7-590f-42cd-8a89-ab750a7c9b80'
 api_key = key
 watcher = LolWatcher(api_key)
 
@@ -58,39 +58,51 @@ def participants_stats_inMatch(my_region, summoner_name, match_num, *args):
 async def mayor_maestry(ctx,my_region,summoner_name,info):
 
     
-  # Champs ID + Name (cambiar a base de datos .jason)
-  dict_o_champs = {"266":"Aatrox","103":"Ahri","84":"Akali","12":"Alistar","32":"Amumu","34":"Anivia","1":"Annie","22":"Ashe","136":"Aurelion Sol","268":"Azir","432":"Bard","53":"Blitzcrank","63":"Brand","201":"Braum","51":"Caitlyn","164":"Camille","69":"Cassiopeia","31":"Chogath","99":"Cassiopeia","81":"Corki","122":"Darius","119":"Draven","36":"Dr. Mundo","245":"Ekko","60":"Elise","28":"Evelynn","81":"Ezreal","9":"Fiddlesticks","114":"Fiora","105":"Fizz","79":"Gangplank","104":"Graves","120":"Hecarim","74":"Heimerdinger","39":"Irelia","40":"Janna","59":"Jarvan IV","24":"Jax","126":"Jayce","222":"Jinx","429":"Kalista","43":"Karma","30":"Karthus","38":"Kassadin","55":"Katarina","10":"Kayle","141":"Kayn","85":"Kennen","121":"Kha'Zix","203":"Kindred","96":"Kog'Maw","7":"LeBlanc","64":"Lee Sin","89":"Leona","127":"Lissandra","236":"Lucian","117":"Lulu","56":"Lux","157":"Maokai","82":"Malphite","25":"Malzahar","57":"Malzahar","21":"Miss Fortune","82":"Mordekaiser","27":"Morgana","111":"Nami","33":"Nasus","91":"Nautilus","69":"Nidalee","76":"Nidalee","56":"Nocturne","20":"Nunu","4":"Olaf","61":"Orianna","80":"Pantheon","78":"Poppy","133":"Quinn","421":"Rek'Sai","58":"Renekton","107":"Rengar","92":"Riven","68":"Rumble","13":"Ryze","113":"Sejuani","35":"Shaco","98":"Shen","102":"Shyvana","27":"Singed","14":"Sion","15":"Sivir","72":"Skarner","16":"Soraka","50":"Swain","517":"Sylas","134":"Syndra","223":"Tahm Kench","163":"Taliyah","91":"Talon","44":"Taric","17":"Teemo","412":"Tresh","18":"Tristana","48":"Trundle","23":"Trymdamere","4":"Twisted Fate","29":"Twitch","77":"Udyr","6":"Urgot","110":"Varus","67":"Vayne","45":"Veigar","161":"Velkoz","711":"Vex","254":"Vi","234":"Viego","112":"Viktor","8":"Vladimir","106":"Volibear","19":"Warwick","62":"Wukong","498":"Xayah","101":"Xerath","5":"Xin Zhao","157":"Yasuo","777":"Yone","83":"Yorick","350":"Yuumi","154":"Zac","238":"Zed","221":"Zeri","268":"Ziggs","26":"Zilean","142":"Zoe","143":"Zyra"}
-
   # Get summoner data
   me = watcher.summoner.by_name(my_region, str(summoner_name))
   
-  # Obtengo una lista con dicccionarios con la informacion de los campeones.
+  #Obtengo una lista con dicccionarios con la informacion de los campeones.
   total_maestry = watcher.champion_mastery.by_summoner(my_region,me['id']) # Get masteries data
 
 
   # Creo Listas que guarden lo que necesitare para crear un dataframe.
-  first3_mastery_champs = []
+  first3_mastery_champs = [] #Esta lista se genera a partir de los resultados en total_maestry
+  first3_mastery_champs_names = []
   first3_mastery_points = []
   first3_mastery_champslvl = []
 
+  keychamplist = [] # lista para guardar nuevos keys de los campeones
+  valueschamplist = [] # lista para guardar nuevos values de los campeones
+  
 
-  for i in range(3): # Separo las listas dentro de total maestry para obtener toda la informacion de los campeones. # Obtengo el nombre ID de los campeones y los guardo en una lista
-     first3_mastery_champs.append(total_maestry[i]['championId'])
-     first3_mastery_points.append(total_maestry[i]['championPoints'])
-     first3_mastery_champslvl.append(total_maestry[i]['championLevel'])
+  for i in range(3):
+    first3_mastery_champslvl.append(total_maestry[i]['championLevel'])
+    first3_mastery_points.append(total_maestry[i]['championPoints'])
+    first3_mastery_champs.append(total_maestry[i]['championId'])
+    
 
-  # Obtengo los champs de la lista de IDs y los guardo en variables
-  champID1 = first3_mastery_champs[0]
-  champID2 = first3_mastery_champs[1]
-  champID3 = first3_mastery_champs[2]
+  # Buscar en champions.json el id de los campeones y obtener el nombre del campeon en total_maestry
 
-  # Obtengo el nombre de los campeones y los guardo en variables para posibles usos
-  champ_name1 = dict_o_champs[f"{champID1}"]
-  champ_name2 = dict_o_champs[f"{champID2}"]
-  champ_name3 = dict_o_champs[f"{champID3}"]
+  with open('Utilidades\__pycache__\champion.json','r', encoding='utf-8') as file:   
+     data = json.load(file) 
+     data_champs_all = data['data']
+     #print(data_champs_all["Aatrox"])
+     for key in data_champs_all:
+         keychamplist.append(data_champs_all[key]["id"])  
+         valueschamplist.append(data_champs_all[key]["key"])
 
- # Agrego estos valores a una lista para mostrarlos en pantalla.
-  lista_de_champs = [champ_name1, champ_name2, champ_name3]
+
+   # Armar un dict con las listas keychamplist y valueschamplist
+  dict_from_list = dict(zip(keychamplist, valueschamplist))
+
+
+  for key in dict_from_list:
+      if int(dict_from_list[key]) == first3_mastery_champs[0]:
+             first3_mastery_champs_names.append(key)
+      elif int(dict_from_list[key]) == first3_mastery_champs[1]:
+             first3_mastery_champs_names.append(key)
+      elif int(dict_from_list[key]) == first3_mastery_champs[2]:
+             first3_mastery_champs_names.append(key)
 
   if info == "Maestry":
      response = first3_mastery_points
@@ -101,15 +113,15 @@ async def mayor_maestry(ctx,my_region,summoner_name,info):
      await ctx.send(response)
      #return first3_mastery_champslvl
   elif info == "Name":
-     response = lista_de_champs
+     response = first3_mastery_champs_names
      await ctx.send(response)
      #return lista_de_champs
   elif info == "All":
-     response = [first3_mastery_points, first3_mastery_champslvl, lista_de_champs]
+     response = [first3_mastery_points, first3_mastery_champslvl, first3_mastery_champs_names]
      await ctx.send(response)
      #return total_maestry
   elif info == "Allstr":
-     response = f"Tus personajes con maestria mas alta son: {champ_name1}, con {first3_mastery_points[0]} ,{champ_name2} con {first3_mastery_points[1]} y {champ_name3} con {first3_mastery_points[2]} \n y sus niveles son {first3_mastery_champslvl} respectivamente."
+     response = f"Tus personajes con maestria mas alta son: {first3_mastery_champs_names[0]}, con {first3_mastery_points[0]} ,{first3_mastery_champs_names[1]} con {first3_mastery_points[1]} y {first3_mastery_champs_names[2]} con {first3_mastery_points[2]} \n y sus niveles son {first3_mastery_champslvl} respectivamente."
      await ctx.send(response)
      #return f"Tus personajes con maestria mas alta son: {champ_name1}, con {first3_mastery_points[0]} ,{champ_name2} con {first3_mastery_points[1]} y {champ_name3} con {first3_mastery_points[2]} \n y sus niveles son {first3_mastery_champslvl} respectivamente."
 
