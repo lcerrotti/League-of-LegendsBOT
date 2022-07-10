@@ -46,9 +46,4 @@ async def table(ctx):
 
 
 
-
-
-
-
-
 bot.run(TOKEN)
