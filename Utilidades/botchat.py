@@ -6,7 +6,8 @@ from dotenv import load_dotenv
 from discord.ext import commands
 from funciones import *
 import pandas as pd
-
+import df2img
+import discord
 
 
 #Cargamos el archivo .env
@@ -29,18 +30,45 @@ async def lot(ctx,my_region,summoner_name,match_num):
 
 @bot.command(name="tb")
 async def table(ctx):
-    # Define a dictionary containing employee data
-    data = {'Name':['Jai', 'Princi', 'Gaurav', 'Anuj'],
+        # Define a dictionary containing employee data
+    df = {'Name':['Jai', 'Princi', 'Gaurav', 'Anuj'],
             'Age':[27, 24, 22, 32],
             'Address':['Delhi', 'Kanpur', 'Allahabad', 'Kannauj'],
             'Qualification':['Msc', 'MA', 'MCA', 'Phd']}
     
     # Convert the dictionary into DataFrame 
-    df = pd.DataFrame(data)
+    df = pd.DataFrame(df)
     
     # select two columns
-    response =  df[['Name', 'Qualification',"Age","Address"]]
-    await ctx.send(response)
+    print(df[['Name', 'Qualification',"Age","Address"]])
+
+
+
+    fig = df2img.plot_dataframe(
+        df,
+        # title=dict(
+        #     font_color="darkred",
+        #     font_family="Times New Roman",
+        #     font_size=16,
+        #     text="This is a title",
+        # ),
+        tbl_header=dict(
+            align="right",
+            fill_color="#327778",
+            font_color="white",
+            font_size=10,
+            line_color="darkslategray",
+        ),
+        tbl_cells=dict(
+            align="right",
+            line_color="darkslategray",
+        ),
+        row_fill_color=("#AFFEFF", "#13D1D4"),
+        fig_size=(480, 120),
+    )
+
+    df2img.save_dataframe(fig=fig, filename="plot.png")
+    await ctx.send(file=discord.File('plot.png'))
     
 
 
