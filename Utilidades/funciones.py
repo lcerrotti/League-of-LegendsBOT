@@ -6,6 +6,8 @@ from dotenv import load_dotenv
 from discord.ext import commands
 import json
 
+from zmq import ctx_opt_names
+
 
 # Riot API Key
 key = 'RGAPI-714088e7-590f-42cd-8a89-ab750a7c9b80'
@@ -182,7 +184,7 @@ def whowin_in(my_region,summoner_name,match_num,team_color):
 #print(blue_team)
 #red_team = what_is_my_team("la2","XxSoul MasterxX",0)[1]
 #print(red_team)
-def what_is_my_team(my_region, summoner_name, match_num):
+async def what_is_my_team(ctx,my_region, summoner_name, match_num):
 
   # Obtengo el puuid del summoner para separarlo en una variable.
   me = watcher.summoner.by_name(my_region, summoner_name)
@@ -212,7 +214,8 @@ def what_is_my_team(my_region, summoner_name, match_num):
      if player["teamId"] == 200:
         red_team.append(player["summonerName"])
    
-
+  #response = f"El equipo azul esta conformado por {blue_team} y el equipo rojo por {red_team}"
+  #await ctx.send(response)
   return blue_team, red_team
 
 
