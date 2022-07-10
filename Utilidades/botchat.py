@@ -17,6 +17,11 @@ TOKEN = os.getenv('DISCORD_TOKEN')
 #Definimos el Bot
 bot = commands.Bot(command_prefix="!") # Prefijo de comando
 
+@bot.command(name="h")
+async def help(ctx):
+    response = "**!h:** *Muestra la lista de comandos*\n**!mastery (servidor) (Nombre de Invocador) (Allstr):** *Muestra las primeras 3 maestrias (si el nombre tiene espacio encerrarlo entre comillas)*\n**!lot (servidor) (Nombre de Invocador) (Numero de Partida):** *Muestra la lista de players de una partida (si el nombre tiene espacio encerrarlo entre comillas)*\n**!tb:** *Muestra la tabla de campeones*" 
+    await ctx.send(response)
+
 @bot.command(name="mastery")
 async def mastery(ctx,my_region,summoner_name,info):
     response = await mayor_maestry(ctx,my_region,summoner_name,info)
