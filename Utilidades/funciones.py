@@ -79,7 +79,7 @@ async def mayor_maestry(ctx,my_region,summoner_name,info):
 
   # Buscar en champions.json el id de los campeones y obtener el nombre del campeon en total_maestry
 
-  with open('Utilidades\__pycache__\champion.json','r', encoding='utf-8') as file:   
+  with open('Utilidades\ArchivosExternos\champion.json','r', encoding='utf-8') as file:   
      data = json.load(file) 
      data_champs_all = data['data']
      #print(data_champs_all["Aatrox"])
