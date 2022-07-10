@@ -7,18 +7,12 @@ from discord.ext import commands
 import json
 
 
-
 # Riot API Key
 key = 'RGAPI-714088e7-590f-42cd-8a89-ab750a7c9b80'
 api_key = key
 watcher = LolWatcher(api_key)
 
-#Cargamos el archivo .env
-load_dotenv()
-TOKEN = os.getenv('DISCORD_TOKEN')
 
-#Definimos el Bot
-bot = commands.Bot(command_prefix="!") # Prefijo de comando
 
 # Obtengo la informacion de una partida por personaje.
 #servidor , summoner_name, match_num, *args (si se agrega un parametro mas, se retorna solo ese parametro)
@@ -56,7 +50,7 @@ def participants_stats_inMatch(my_region, summoner_name, match_num, *args):
 # Obtengo la informacion de los campeones con mayor maestria (Primeros 3)
 # servidor, invocador, parametro
 # mayor_maestry("la2","XxSoul MasterxX","Allstr")
-@bot.command(name="maestry")
+
 async def mayor_maestry(ctx,my_region,summoner_name,info):
 
     
@@ -260,10 +254,6 @@ def gameDuration(my_region, summoner_name, match_num):
   return gameDuration
 
 
-
-
-bot.run(TOKEN)
-# Falta crear una funcion que devuelva la duracion de la partida por ID
 
 
 
