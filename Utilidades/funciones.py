@@ -196,15 +196,10 @@ async def what_is_my_team(ctx,my_region, summoner_name, match_num):
   # Desestructurando un Metadata de una partida.
   match_selected = watcher.match.by_id(my_region, matches20[match_num]) # Obtengo el match con el ID mas reciente. (MODIFICANDO EL 0 ELIJO LA PROXIMA PARTIDA)
 
-
   # Declarando participantes de la partida.
   participants = match_selected["info"]["participants"]
   blue_team = []
   red_team = []
-
-  #participant = participants[0]
-  #participant_team = participant["teamId"]
-  #print(participant_team)
 
   for player in participants:
      if player["teamId"] == 100:
@@ -214,8 +209,6 @@ async def what_is_my_team(ctx,my_region, summoner_name, match_num):
      if player["teamId"] == 200:
         red_team.append(player["summonerName"])
    
-  #response = f"El equipo azul esta conformado por {blue_team} y el equipo rojo por {red_team}"
-  #await ctx.send(response)
   return blue_team, red_team
 
 

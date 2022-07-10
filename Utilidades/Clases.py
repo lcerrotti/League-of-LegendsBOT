@@ -15,7 +15,7 @@ class Match():
 
 
 
-match1 = Match(0,"la2","XxSoul MasterxX")
+match1 = Match(1,"la2","XxSoul MasterxX")
 print(match1.team_blue)
 print(match1.team_red)
 print(match1.team_blue_result)
